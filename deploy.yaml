@@ -20,14 +20,22 @@ spec:
       containers:
       - image: docker.io/mariadb:10.4
         name: mariadb
+        env:
+          - name: MYSQL-ROOT-PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-root-password
+        envFrom:
+        - secretRef:
+          name: mariadb-user-creds
         resources: {}
-        port:
+        ports:
         - containerPort: 3306
           protocol: TCP
         volumeMounts:
         - mountPath: /var/lib/mysql
           name: mariadb-volume-1
-    volumes:
-    - emptyDir: {}
-      name: mariadb-volume-1
+      volumes:
+      - emptyDir: {}
+        name: mariadb-volume-1
 status: {}
